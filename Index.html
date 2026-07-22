@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BiblioNova - Ecosistema de Innovación | Bibliotecas Areandina</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Librería para generación de QR en vivo -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  
+  <style>
+    :root {
+      --bg: #f4f9fc;
+      --surface: #ffffff;
+      --surface2: #eaf4fa;
+      --sky: #1e9fd6;
+      --teal: #0fa988;
+      --oa: #f68212;          /* Naranja Acceso Abierto */
+      --purple: #7c5cfc;      /* Acento Inteligencia Artificial */
+      --leaf: #3f9e5c;        /* Acento Conectividad y Automatización */
+      --ink: #14324a;
+      --muted: #5b7288;
+      --border: rgba(30,159,214,0.18);
+      --shadow: 0 8px 30px rgba(20,50,74,0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(rgba(30,159,214,0.10) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 4px; z-index: 200; width: 0%;
+      background: linear-gradient(90deg, var(--sky), var(--teal), var(--oa));
+      transition: width 0.1s ease-out;
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 2.5rem;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: 'Fraunces', serif; font-weight: 900; font-size: 1.1rem; color: var(--ink); text-decoration: none; }
+    .nav-logo span { color: var(--oa); }
+    .nav-links { display: flex; gap: 1.4rem; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: color .2s; }
+    .nav-links a:hover { color: var(--sky); }
+
+    main { position: relative; z-index: 1; }
+    section { padding: 6.5rem 2rem 4rem; }
+    .container { max-width: 1120px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 0.75rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 0.7rem;
+    }
+    .section-title {
+      font-family: 'Fraunces', serif; font-size: clamp(1.7rem, 4vw, 2.6rem);
+      font-weight: 900; letter-spacing: -0.015em; line-height: 1.12; margin-bottom: 1.2rem;
+    }
+    .section-body { color: var(--muted); max-width: 720px; font-size: 0.98rem; }
+    .divider {
+      width: 64px; height: 4px; border-radius: 3px;
+      background: linear-gradient(90deg, var(--sky), var(--oa));
+      margin: 1rem 0 2rem;
+    }
+
+    /* ── PILARES GENERALES ── */
+    .pilares { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+    .pilar {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 16px;
+      padding: 1.5rem; transition: transform .25s, box-shadow .25s;
+    }
+    .pilar:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .pilar-icon { font-size: 1.7rem; margin-bottom: 0.7rem; }
+    .pilar h3 { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .pilar p { font-size: 0.85rem; color: var(--muted); }
+
+    /* ── BIBLIONOVA ── */
+    #bibionova { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .bn-summary { display: flex; gap: 1.2rem; flex-wrap: wrap; margin: 1rem 0 2rem; }
+    .bn-summary-item {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+      padding: 0.7rem 1.1rem; font-size: 0.82rem; font-weight: 700; color: var(--ink);
+      display: flex; align-items: baseline; gap: 0.4rem;
+    }
+    .bn-summary-item b { font-family: 'Fraunces', serif; font-size: 1.15rem; }
+    .bn-summary-item.c1 b { color: var(--sky); }
+    .bn-summary-item.c2 b { color: var(--purple); }
+    .bn-summary-item.c3 b { color: var(--teal); }
+
+    .pilares.bn-pilares .pilar { position: relative; padding-top: 1.9rem; }
+    .bn-pilar-tag {
+      position: absolute; top: -12px; left: 1.3rem;
+      font-family: 'Fraunces', serif; font-weight: 900; font-size: 0.8rem;
+      color: #fff; background: var(--sky); border-radius: 8px;
+      padding: 0.15rem 0.55rem;
+    }
+    .pilares.bn-pilares .pilar:nth-child(1) .bn-pilar-tag { background: var(--sky); }
+    .pilares.bn-pilares .pilar:nth-child(2) .bn-pilar-tag { background: var(--purple); }
+    .pilares.bn-pilares .pilar:nth-child(3) .bn-pilar-tag { background: var(--teal); }
+    .pilares.bn-pilares .pilar:nth-child(4) .bn-pilar-tag { background: var(--oa); }
+    .pilares.bn-pilares .pilar:nth-child(5) .bn-pilar-tag { background: var(--leaf); }
+
+    .bn-pilar-block { margin-top: 4rem; }
+    .bn-pilar-head { display: flex; align-items: flex-start; gap: 1.1rem; margin-bottom: 1.6rem; }
+    .bn-pilar-num {
+      font-family: 'Fraunces', serif; font-weight: 900; font-size: 2rem;
+      color: var(--sky); flex-shrink: 0; line-height: 1; opacity: 0.85;
+    }
+    .bn-pilar-block.c2 .bn-pilar-num { color: var(--purple); }
+    .bn-pilar-block.c3 .bn-pilar-num { color: var(--teal); }
+    .bn-pilar-block.c4 .bn-pilar-num { color: var(--oa); }
+    .bn-pilar-block.c5 .bn-pilar-num { color: var(--leaf); }
+    .bn-pilar-head h3 { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 800; margin-bottom: 0.3rem; }
+    .bn-pilar-head p { font-size: 0.88rem; color: var(--muted); max-width: 640px; }
+
+    /* ── AJUSTE DE TARJETAS E IMÁGENES COMPLETAS SIN RECORTAR ── */
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+    
+    .tool-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+      overflow: hidden; display: flex; flex-direction: column;
+      position: relative; transition: transform .25s, box-shadow .25s, border-color .25s;
+    }
+    .tool-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: rgba(30,159,214,0.45); }
+    
+    /* PORTADA AJUSTADA PARA VER LA IMAGEN COMPLETA */
+    .tool-banner-wrap {
+      width: 100%; 
+      height: 200px; 
+      background: #f8fafc;
+      overflow: hidden; position: relative; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tool-banner-img {
+      width: 100%; height: 100%; 
+      object-fit: contain; /* Garantiza que la imagen se adapte completa sin recortes */
+      transition: transform .3s ease;
+    }
+    .tool-card:hover .tool-banner-img { transform: scale(1.03); }
+
+    .tool-card-body {
+      padding: 1.25rem; display: flex; flex-direction: column; gap: 0.8rem; flex-grow: 1;
+    }
+
+    .tool-content-layout {
+      display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; height: 100%;
+    }
+    .tool-info { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .tool-name { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 800; color: var(--ink); line-height: 1.2; }
+    
+    .tool-scope {
+      display: inline-block; align-self: flex-start;
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 100px;
+      padding: 0.2rem 0.75rem; font-size: 0.7rem; font-weight: 700; color: var(--sky);
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .tool-desc { font-size: 0.85rem; color: var(--muted); flex-grow: 1; }
+    
+    /* CAJA DEL QR */
+    .qr-static-box {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 0.5rem; text-align: center; flex-shrink: 0; width: 100px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .qr-static-box .qr-holder { width: 85px; height: 85px; }
+    .qr-static-box .qr-holder img { width: 100% !important; height: 100% !important; border-radius: 4px; }
+    .qr-label { font-size: 0.62rem; font-weight: 700; color: var(--muted); margin-top: 0.3rem; text-transform: uppercase; }
+
+    .btn-main {
+      text-align: center; background: var(--sky); color: #fff;
+      padding: 0.6rem 0.8rem; border-radius: 10px; font-size: 0.82rem; font-weight: 700;
+      text-decoration: none; transition: background .2s; margin-top: auto; display: block;
+    }
+    .btn-main:hover { background: #1583b2; }
+
+    /* ESTILOS DE IA */
+    .tool-card.ia-card { border: 1.5px solid rgba(124,92,252,0.35); }
+    .tool-card.ia-card .tool-scope { color: #7c5cfc; border-color: rgba(124,92,252,0.3); background: rgba(124,92,252,0.07); }
+    .tool-card.ia-card .btn-main { background: var(--purple); }
+    .tool-card.ia-card .btn-main:hover { background: #613df0; }
+
+    /* MÓDULO EN DESARROLLO (DE LA IMAGEN ADJUNTA) */
+    .dev-module-box {
+      background: #eef7f6;
+      border: 1.5px dashed #0fa988;
+      border-radius: 16px;
+      padding: 1.5rem 1.8rem;
+      margin-top: 2.5rem;
+    }
+    .dev-module-title {
+      font-size: 0.82rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+      color: #0fa988; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .dev-module-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.2rem; max-width: 850px; }
+    .dev-items-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
+    .dev-item { display: flex; flex-direction: column; gap: 0.2rem; }
+    .dev-item-head { display: flex; align-items: center; gap: 0.4rem; font-weight: 700; font-size: 0.95rem; color: var(--ink); }
+    .dev-item p { font-size: 0.82rem; color: var(--muted); }
+
+    .bn-banner-footer {
+      background: #fff7ed; border: 1px solid #ffedd5; border-radius: 14px;
+      padding: 1.1rem 1.4rem; margin-top: 1.8rem; font-size: 0.88rem; color: #c2410c;
+    }
+    .bn-banner-footer strong { color: #9a3412; }
+
+    /* ESTILOS DE AUTOMATIZACIÓN (PILAR 5) */
+    .tool-card.leaf-card { border: 1.5px solid rgba(63,158,92,0.3); }
+    .tool-card.leaf-card .tool-scope { color: var(--leaf); border-color: rgba(63,158,92,0.3); background: rgba(63,158,92,0.07); }
+    .tool-card.leaf-card .btn-main { background: var(--leaf); }
+
+    /* DIAGRAMAS DE FLUJO DEL PILAR 5 */
+    .flow-card {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 16px;
+      padding: 1.4rem; margin-top: 1.4rem; transition: transform .25s, box-shadow .25s;
+    }
+    .flow-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .flow-card h4 { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .flow-card > p { font-size: 0.83rem; color: var(--muted); margin-bottom: 1.1rem; max-width: 680px; }
+    .flow-row { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .flow-box {
+      background: #fff; border: 1px solid var(--border); border-radius: 100px;
+      padding: 0.5rem 1rem; font-size: 0.78rem; font-weight: 700; color: var(--ink);
+      text-align: center; box-shadow: 0 2px 8px rgba(20,50,74,0.04);
+    }
+    .flow-box small { display: block; font-weight: 500; color: var(--muted); font-size: 0.68rem; margin-top: 0.1rem; }
+    .flow-arrow { color: var(--leaf); font-size: 1.1rem; font-weight: 700; flex-shrink: 0; }
+
+    /* ── EQUIPO CENTRADO Y FOTOS ── */
+    #equipo { background: var(--bg); border-top: 1px solid var(--border); text-align: center; }
+    #equipo .section-body { margin: 0 auto; }
+    #equipo .divider { margin: 1rem auto 2rem; }
+
+    .equipo-grid { 
+      display: flex; flex-wrap: wrap; justify-content: center; 
+      gap: 1.5rem; margin-top: 2rem; 
+    }
+    
+    .member-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 1.5rem 1.2rem; text-align: center; transition: transform .25s, box-shadow .25s;
+      flex: 1 1 200px; max-width: 240px;
+    }
+    .member-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    
+    .member-img-wrap {
+      width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1rem; 
+      border: 3px solid var(--sky); box-shadow: 0 4px 12px rgba(20,50,74,0.1);
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+    .member-img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transform: scale(1.15); }
+    .member-card h4 { font-size: 1rem; font-weight: 700; color: var(--ink); }
+    .member-card .rol { font-size: 0.8rem; color: var(--teal); font-weight: 600; margin-top: 0.2rem; }
+
+    footer {
+      background: var(--ink); color: rgba(255,255,255,0.85);
+      padding: 2.2rem 2.5rem; text-align: center; font-size: 0.82rem;
+      position: relative; z-index: 1; margin-top: 3rem;
+    }
+    footer strong { color: #fff; }
+
+    @media (max-width: 640px) {
+      nav { padding: 0.75rem 1.2rem; }
+      .nav-links { display: none; }
+      section { padding: 5rem 1.2rem 3rem; }
+      .tool-content-layout { flex-direction: column; }
+      .qr-static-box { width: 100%; margin-top: 0.5rem; }
+      .qr-static-box .qr-holder { width: 120px; height: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav>
+  <a href="#bibionova" class="nav-logo">Biblio<span>Nova</span></a>
+  <div class="nav-links">
+    <a href="#pilar1">01. Acceso</a>
+    <a href="#pilar2">02. Intellectus</a>
+    <a href="#pilar3">03. Formación</a>
+    <a href="#pilar4">04. Gestión</a>
+    <a href="#pilar5">05. Conectividad</a>
+    <a href="#equipo">Equipo</a>
+  </div>
+</nav>
+
+<main>
+  <!-- BIBLIONOVA SECCIÓN PRINCIPAL -->
+  <section id="bibionova">
+    <div class="container">
+      <div class="section-label">El ecosistema de innovación</div>
+      <h1 class="section-title">BiblioNova</h1>
+      <div class="divider"></div>
+      <p class="section-body">
+        <strong>BiblioNova</strong> es el ecosistema de innovación de las Bibliotecas Areandina, que integra un
+        conjunto de iniciativas orientadas a transformar la experiencia de los usuarios y fortalecer la gestión
+        de los colaboradores. A través de la implementación de tecnologías, automatización de procesos e
+        inteligencia artificial, impulsa servicios bibliotecarios más eficientes, accesibles e innovadores.
+      </p>
+
+      <div class="bn-summary">
+        <div class="bn-summary-item c1"><b>5</b> pilares estratégicos</div>
+        <div class="bn-summary-item c2"><b>12</b> proyectos de innovación</div>
+        <div class="bn-summary-item c3"><b>+27.495</b> usuarios activos en formación IA</div>
+      </div>
+
+      <div class="section-label" style="margin-top:2.4rem;">Arquitectura del ecosistema</div>
+      <div class="pilares bn-pilares">
+        <div class="pilar">
+          <span class="bn-pilar-tag">01</span>
+          <div class="pilar-icon">🔎</div>
+          <h3>Acceso y Descubrimiento</h3>
+          <p>Elimina las barreras entre el usuario y la información científica, facilitando el acceso integrado e intuitivo.</p>
+        </div>
+        <div class="pilar">
+          <span class="bn-pilar-tag">02</span>
+          <div class="pilar-icon">🤖</div>
+          <h3>Inteligencia Artificial</h3>
+          <p>Agentes IA especializados para búsqueda académica, citación, investigación, bibliometría y apoyo jurídico 24/7.</p>
+        </div>
+        <div class="pilar">
+          <span class="bn-pilar-tag">03</span>
+          <div class="pilar-icon">🎓</div>
+          <h3>Formación Digital</h3>
+          <p>Curso estructurado en IA con +27.495 usuarios activos y guías de alfabetización informacional.</p>
+        </div>
+        <div class="pilar">
+          <span class="bn-pilar-tag">04</span>
+          <div class="pilar-icon">📊</div>
+          <h3>Gestión e Inteligencia</h3>
+          <p>Tablero SROI, automatización de reservas y servicios para transformar datos en decisiones estratégicas.</p>
+        </div>
+        <div class="pilar">
+          <span class="bn-pilar-tag">05</span>
+          <div class="pilar-icon">🔗</div>
+          <h3>Conectividad</h3>
+          <p>Programación de tareas automáticas dentro de Google Workspace para optimizar procesos bibliotecarios.</p>
+        </div>
+      </div>
+
+      <!-- PILAR 1 -->
+      <div class="bn-pilar-block c1" id="pilar1">
+        <div class="bn-pilar-head">
+          <div class="bn-pilar-num">01</div>
+          <div>
+            <h3>Acceso y Descubrimiento</h3>
+            <p>Recursos digitales organizados por facultad, micrositios especializados, buscador inteligente y catálogo interactivo.</p>
+          </div>
+        </div>
+        <div class="tools-grid">
+          
+          <!-- BiblioClick -->
+          <div class="tool-card">
+            <div class="tool-banner-wrap">
+              <img src="https://lh3.googleusercontent.com/d/1mSVOK6dnf3StAFSz3iWsO5Bsyg2mLh3x" alt="BiblioClick" class="tool-banner-img">
+            </div>
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">BiblioClick</div>
+                  <span class="tool-scope">Portal de recursos</span>
+                  <p class="tool-desc">Portal modernizado con buscador inteligente por palabras clave y micrositios especializados por facultad con identidad visual propia.</p>
+                  <a href="https://bidig.areandina.edu.co/main-home/inicio-todas-las-facultades-micro-facultades/" target="_blank" class="btn-main">Abrir Portal</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://bidig.areandina.edu.co/main-home/inicio-todas-las-facultades-micro-facultades/"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Colecciones con Sentido -->
+          <div class="tool-card">
+            <div class="tool-banner-wrap">
+              <img src="https://lh3.googleusercontent.com/d/13xixGTpApTpanEEd9aHCKv3w_kbS55zH" alt="Colecciones Con Sentido" class="tool-banner-img">
+            </div>
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">Colecciones Con Sentido</div>
+                  <span class="tool-scope">Catálogo interactivo · BIDIG</span>
+                  <p class="tool-desc">Catálogo interactivo del acervo físico y digital en BIDIG con filtros avanzados por asignatura y ubicación geográfica.</p>
+                  <a href="https://datastudio.google.com/u/0/reporting/45be3372-3bc9-4955-ae98-5285a9eba877?s=h0cUDW_LSyU" target="_blank" class="btn-main">Abrir Catálogo</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://datastudio.google.com/u/0/reporting/45be3372-3bc9-4955-ae98-5285a9eba877?s=h0cUDW_LSyU"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PILAR 2: INTELIGENCIA ARTIFICIAL -->
+      <div class="bn-pilar-block c2" id="pilar2">
+        <div class="bn-pilar-head">
+          <div class="bn-pilar-num">02</div>
+          <div>
+            <h3>Inteligencia Artificial · Suite Intellectus</h3>
+            <p>Ecosistema de agentes de IA entrenados con la metodología Areandina para potenciar la investigación, citación, ciencia abierta y gestión jurídica.</p>
+          </div>
+        </div>
+
+        <!-- AGENTES ACTIVOS (TODOS LOS 5 AGENTES) -->
+        <h4 style="font-family:'Fraunces',serif; font-size:1.1rem; font-weight:800; margin-bottom:1rem; color:var(--purple);">Agentes Activos</h4>
+        <div class="tools-grid">
+          
+          <!-- Astra_Biblio -->
+          <div class="tool-card ia-card">
+            <div class="tool-banner-wrap">
+              <img src="https://lh3.googleusercontent.com/d/1tcHAPzeS0MZrNHt2Gzh3l2juZfNQfGe_" alt="AstraBiblio" class="tool-banner-img">
+            </div>
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">Astra_Biblio</div>
+                  <span class="tool-scope">Búsqueda académica</span>
+                  <p class="tool-desc">Enseña a construir ecuaciones de búsqueda con operadores booleanos para Scopus, ProQuest y PubMed.</p>
+                  <a href="https://gemini.google.com/gem/fbe3f62ed376?usp=sharing" target="_blank" class="btn-main">Abrir Asistente</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://gemini.google.com/gem/fbe3f62ed376?usp=sharing"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MentorMind -->
+          <div class="tool-card ia-card">
+            <div class="tool-banner-wrap">
+              <img src="https://lh3.googleusercontent.com/d/18xmYPBMfnVuagLhVuDvU_59fXesfLSox" alt="MentorMind" class="tool-banner-img">
+            </div>
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">MentorMind</div>
+                  <span class="tool-scope">Mentor de investigación</span>
+                  <p class="tool-desc">Guía paso a paso en la construcción rigurosa de tesis, monografías y proyectos de investigación.</p>
+                  <a href="https://gemini.google.com/gem/4b77a8daf97c?usp=sharing" target="_blank" class="btn-main">Abrir Asistente</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://gemini.google.com/gem/4b77a8daf97c?usp=sharing"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LexBot Constitucional -->
+          <div class="tool-card ia-card">
+            <div class="tool-banner-wrap">
+              <img src="https://lh3.googleusercontent.com/d/1CxsRBhrAvRgVOObhr-ADj4JzpFSqmUs7" alt="LexBot Constitucional" class="tool-banner-img">
+            </div>
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">LexBot Constitucional</div>
+                  <span class="tool-scope">Asistente Jurídico</span>
+                  <p class="tool-desc">Orientación rápida y precisa en la localización e interpretación de normas, sentencias e hitos jurídicos.</p>
+                  <a href="https://gemini.google.com/gem/bb2c21657470?usp=sharing" target="_blank" class="btn-main">Abrir Asistente</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://gemini.google.com/gem/bb2c21657470?usp=sharing"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Asesor de Ciencia Abierta -->
+          <div class="tool-card ia-card">
+            <div class="tool-banner-wrap">
+              <img src="https://lh3.googleusercontent.com/d/1-_sJK6d3fK7FDDLEVPTNDQ0jMIy36_lO" alt="Asesor de Ciencia Abierta" class="tool-banner-img">
+            </div>
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">Asesor de Ciencia Abierta</div>
+                  <span class="tool-scope">Ciencia y Publicación</span>
+                  <p class="tool-desc">Agente especializado en orientación sobre licencias Creative Commons, políticas de autoarchivo, repositorios institucionales y visibilidad académica.</p>
+                  <a href="https://gemini.google.com/gem/1NFfCQoK-j3EdSDi_TAjbg0IaVpE1wtWe?usp=sharing" target="_blank" class="btn-main">Abrir Asistente</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://gemini.google.com/gem/1NFfCQoK-j3EdSDi_TAjbg0IaVpE1wtWe?usp=sharing"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ATLAS -->
+          <div class="tool-card ia-card">
+            <div class="tool-banner-wrap">
+              <img src="https://lh3.googleusercontent.com/d/1YsHGo8DD9CRhdVCzSPlxOPZcLFMDaoZp" alt="ATLAS" class="tool-banner-img">
+            </div>
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">ATLAS</div>
+                  <span class="tool-scope">Bibliometría e Impacto</span>
+                  <p class="tool-desc">Agente Inteligente diseñado para el análisis bibliométrico, evaluación del impacto científico, cuartiles de revistas (JCR/SJR) e índice h.</p>
+                  <a href="https://gemini.google.com/gem/a48a02298c58?usp=sharing" target="_blank" class="btn-main">Abrir Asistente</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://gemini.google.com/gem/a48a02298c58?usp=sharing"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- PILAR 3 -->
+      <div class="bn-pilar-block c3" id="pilar3">
+        <div class="bn-pilar-head">
+          <div class="bn-pilar-num">03</div>
+          <div>
+            <h3>Formación Digital</h3>
+            <p>Desarrolla competencias digitales e investigativas a través de cursos y experiencias estructuradas de aprendizaje.</p>
+          </div>
+        </div>
+
+        <div class="tools-grid">
+          
+          <!-- ApropIA -->
+          <div class="tool-card">
+            <div class="tool-banner-wrap">
+              <img src="https://lh3.googleusercontent.com/d/1HwiE9_JtxmqqYN7WndtkruNT2sLSzWV0" alt="ApropIA" class="tool-banner-img">
+            </div>
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">ApropIA</div>
+                  <span class="tool-scope">Curso Formación IA</span>
+                  <p class="tool-desc">Curso introductorio y práctico de Apropiación de Inteligencia Artificial para la comunidad académica.</p>
+                  <a href="https://areandina-ea.odilotk.es/clubs/join-experience/6RIEKDRV" target="_blank" class="btn-main">Unirse al Curso</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://areandina-ea.odilotk.es/clubs/join-experience/6RIEKDRV"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Google Scholar -->
+          <div class="tool-card">
+            <div class="tool-banner-wrap">
+              <img src="https://lh3.googleusercontent.com/d/18cRglaDUvqMf4ZsGl8PNBWfLcQvSyTso" alt="Google Scholar" class="tool-banner-img">
+            </div>
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">Google Scholar</div>
+                  <span class="tool-scope">Formación Investigativa</span>
+                  <p class="tool-desc">Crea y optimiza tu perfil en Google Scholar para la gestión de citas y posicionamiento científico.</p>
+                  <a href="https://areandina-ea.odilotk.es/clubs/join-experience/UC0Z5ZSW" target="_blank" class="btn-main">Acceder</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://areandina-ea.odilotk.es/clubs/join-experience/UC0Z5ZSW"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Normas APA -->
+          <div class="tool-card">
+            <div class="tool-banner-wrap">
+              <img src="https://lh3.googleusercontent.com/d/1-hkoOosAw4o1ZbyZfL80alw8r1p3-K88" alt="Normas APA" class="tool-banner-img">
+            </div>
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">Normas APA 7</div>
+                  <span class="tool-scope">Citación y Estilo</span>
+                  <p class="tool-desc">Guía interactiva y taller práctico para la aplicación precisa del manual de citación APA 7ma edición.</p>
+                  <a href="https://areandina-ea.odilotk.es/clubs/join-experience/UC0Z5ZSW" target="_blank" class="btn-main">Acceder</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://areandina-ea.odilotk.es/clubs/join-experience/UC0Z5ZSW"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vancouver -->
+          <div class="tool-card">
+            <div class="tool-banner-wrap">
+              <img src="https://lh3.googleusercontent.com/d/1daWsNJUFmncUHsbzIMx6kFgvv-upyZ8B" alt="Estilo Vancouver" class="tool-banner-img">
+            </div>
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">Estilo Vancouver</div>
+                  <span class="tool-scope">Citación Ciencias de la Salud</span>
+                  <p class="tool-desc">Capacitación en normas de referencias bibliográficas Vancouver aplicadas a las áreas de la salud.</p>
+                  <a href="https://areandina-ea.odilotk.es/clubs/join-experience/UC0Z5ZSW" target="_blank" class="btn-main">Acceder</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://areandina-ea.odilotk.es/clubs/join-experience/UC0Z5ZSW"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PILAR 5: CONECTIVIDAD Y AUTOMATIZACIÓN -->
+      <div class="bn-pilar-block c5" id="pilar5">
+        <div class="bn-pilar-head">
+          <div class="bn-pilar-num">05</div>
+          <div>
+            <h3>Conectividad y Automatización</h3>
+            <p>Integración de aplicaciones mediante Google Apps Script para optimizar procesos internos y externos.</p>
+          </div>
+        </div>
+
+        <div class="tools-grid">
+          <div class="tool-card leaf-card">
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">NexusScript Core</div>
+                  <span class="tool-scope">Repositorio Central</span>
+                  <p class="tool-desc">Repositorio central de código y desarrollos en Google Apps Script para el ecosistema de Bibliotecas Areandina.</p>
+                  <a href="https://github.com/nexusscript-core" target="_blank" class="btn-main">Abrir Repositorio</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://github.com/nexusscript-core"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:2rem;">
+          <h4 style="font-family:'Fraunces',serif; font-size:1.1rem; font-weight:800; margin-bottom:1rem;">Diagramas de Automatización Desarrollados</h4>
+          
+          <!-- Flujo 1 -->
+          <div class="flow-card">
+            <h4>1. Servicio de Carta de No Adeudo Automática</h4>
+            <p>Validación inmediata del estado del usuario contra el catálogo para expedir la paz y salvo digital al instante en formato PDF.</p>
+            <div class="flow-row">
+              <div class="flow-box">Formulario de Solicitud<small>Google Forms</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box">Validación de Deuda<small>Google Sheets / Script</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box">Generación de Carta PDF<small>Google Docs / Drive</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box">Envío al Correo<small>Gmail API</small></div>
+            </div>
+          </div>
+
+          <!-- Flujo 2 -->
+          <div class="flow-card">
+            <h4>2. Sistema de Notificaciones de Préstamo</h4>
+            <p>Alertas automáticas vía correo electrónico notificando sobre vencimientos, renovaciones e inminentes devoluciones.</p>
+            <div class="flow-row">
+              <div class="flow-box">Base de Datos de Préstamos<small>Google Sheets</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box">Verificación Diaria Automática<small>Trigger GAS (Time-driven)</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box">Generación de Alerta Personalizada<small>HTML Template</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box">Envío al Usuario<small>Gmail API</small></div>
+            </div>
+          </div>
+
+          <!-- Flujo 3 -->
+          <div class="flow-card">
+            <h4>3. Comunidad de Alfabetización · Biblionova — Areandina </h4>
+            <p>Sistema de gestión de capacitaciones de alfabetización informacional para la red de sedes de la Fundación Universitaria del Área Andina.</p>
+            <div class="flow-row">
+              <div class="flow-box">Evaluación del Estudiante<small>Google Forms</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box">Cálculo de Puntaje<small>Apps Script</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box">Certificado PDF Personalizado<small>Google Slides/Docs</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-box">Notificación con Adjunto<small>Gmail API</small></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MÓDULO EN DESARROLLO (REINCORPORADO FIEL A LA SEGUNDA IMAGEN) -->
+      <div class="dev-module-box">
+        <div class="dev-module-title">
+          <span>🛠️</span> Módulo en Desarrollo
+        </div>
+        <p class="dev-module-desc">Iniciativas estratégicas en etapa de diseño, desarrollo y validación para su futura implementación en Bibliotecas Areandina, garantizadas mediante pruebas, optimización e integración con el ecosistema institucional.</p>
+        
+        <div class="dev-items-grid">
+          <div class="dev-item">
+            <div class="dev-item-head">💬 Librín</div>
+            <p>Chatbot conversacional para servicios y reservas bibliotecarias.</p>
+          </div>
+          <div class="dev-item">
+            <div class="dev-item-head">📁 Mesas Curriculares</div>
+            <p>Solución digital interactiva que automatiza la solicitud de material bibliográfico.</p>
+          </div>
+          <div class="dev-item">
+            <div class="dev-item-head">📑 Automatización de Solicitudes</div>
+            <p>Automatización de solicitudes de formación de usuarios.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTA INFORMATIVA FINAL (SEGUNDA IMAGEN) -->
+      <div class="bn-banner-footer">
+        🌱 <strong>BiblioNova está construido sobre cinco pilares estratégicos</strong>, que articulan 12 proyectos de innovación — desde el buscador de BiblioClick hasta los agentes de Suite Intellectus y las automatizaciones de NexusScript Core.
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EQUIPO DE TRABAJO CENTRADO -->
+  <section id="equipo">
+    <div class="container">
+      <div class="section-label">Liderazgo y Gestión</div>
+      <h2 class="section-title">Equipo de Trabajo</h2>
+      <div class="divider"></div>
+      <p class="section-body">El equipo multidisciplinario detrás de la conceptualización, desarrollo e implementación de BiblioNova.</p>
+
+      <div class="equipo-grid">
+        <div class="member-card">
+          <div class="member-img-wrap">
+            <img src="https://bidig.areandina.edu.co/wp-content/uploads/2026/06/Andrea-Pumarejo-1.png" alt="Andrea Pumarejo" class="member-img">
+          </div>
+          <h4>Andrea Pumarejo</h4>
+          <div class="rol">Coordinadora</div>
+        </div>
+        <div class="member-card">
+          <div class="member-img-wrap">
+            <img src="https://bidig.areandina.edu.co/wp-content/uploads/2025/12/Rosa-Fermina.png" alt="Rosa Fermina" class="member-img">
+          </div>
+          <h4>Rosa Fermina</h4>
+          <div class="rol">Subdirectora de Bibliotecas Areandina</div>
+        </div>
+        <div class="member-card">
+          <div class="member-img-wrap">
+            <img src="https://bidig.areandina.edu.co/wp-content/uploads/2025/12/Cristian.png" alt="Cristian" class="member-img">
+          </div>
+          <h4>Cristian</h4>
+          <div class="rol">Auxiliar</div>
+        </div>
+        <div class="member-card">
+          <div class="member-img-wrap">
+            <img src="https://bidig.areandina.edu.co/wp-content/uploads/2025/12/William-Sayoya.png" alt="William Saboya" class="member-img">
+          </div>
+          <h4>William Saboya</h4>
+          <div class="rol">Analista</div>
+        </div>
+        <div class="member-card">
+          <div class="member-img-wrap">
+            <img src="https://bidig.areandina.edu.co/wp-content/uploads/2025/12/Alejandro-Labrada.png" alt="Alejandro Labrada" class="member-img">
+          </div>
+          <h4>Alejandro Labrada</h4>
+          <div class="rol">Analista</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p><strong>BiblioNova</strong> &copy; 2026 Fundación Universitaria del Área Andina. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+  // Barra de progreso de lectura
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.getElementById('progressBar').style.width = scrolled + '%';
+  });
+
+  // Generador dinámico de códigos QR en vivo dentro de cada contenedor
+  window.addEventListener('DOMContentLoaded', () => {
+    const qrContainers = document.querySelectorAll('.qr-holder');
+    qrContainers.forEach(container => {
+      const targetUrl = container.getAttribute('data-url');
+      if (targetUrl) {
+        new QRCode(container, {
+          text: targetUrl,
+          width: 85,
+          height: 85,
+          colorDark: "#14324a",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
