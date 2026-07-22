@@ -89,10 +89,11 @@
     .pilar {
       background: var(--bg); border: 1px solid var(--border); border-radius: 16px;
       padding: 1.5rem; transition: transform .25s, box-shadow .25s;
+      text-decoration: none; color: inherit; display: block; cursor: pointer;
     }
     .pilar:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
     .pilar-icon { font-size: 1.7rem; margin-bottom: 0.7rem; }
-    .pilar h3 { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .pilar h3 { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--ink); }
     .pilar p { font-size: 0.85rem; color: var(--muted); }
 
     /* ── BIBLIONOVA ── */
@@ -144,7 +145,6 @@
     }
     .tool-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: rgba(30,159,214,0.45); }
     
-    /* PORTADA AJUSTADA PARA VER LA IMAGEN COMPLETA */
     .tool-banner-wrap {
       width: 100%; 
       height: 200px; 
@@ -154,7 +154,7 @@
     }
     .tool-banner-img {
       width: 100%; height: 100%; 
-      object-fit: contain; /* Garantiza que la imagen se adapte completa sin recortes */
+      object-fit: contain;
       transition: transform .3s ease;
     }
     .tool-card:hover .tool-banner-img { transform: scale(1.03); }
@@ -202,29 +202,11 @@
     .tool-card.ia-card .btn-main { background: var(--purple); }
     .tool-card.ia-card .btn-main:hover { background: #613df0; }
 
-    /* MÓDULO EN DESARROLLO (DE LA IMAGEN ADJUNTA) */
-    .dev-module-box {
-      background: #eef7f6;
-      border: 1.5px dashed #0fa988;
-      border-radius: 16px;
-      padding: 1.5rem 1.8rem;
-      margin-top: 2.5rem;
-    }
-    .dev-module-title {
-      font-size: 0.82rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
-      color: #0fa988; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;
-    }
-    .dev-module-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.2rem; max-width: 850px; }
-    .dev-items-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
-    .dev-item { display: flex; flex-direction: column; gap: 0.2rem; }
-    .dev-item-head { display: flex; align-items: center; gap: 0.4rem; font-weight: 700; font-size: 0.95rem; color: var(--ink); }
-    .dev-item p { font-size: 0.82rem; color: var(--muted); }
-
-    .bn-banner-footer {
-      background: #fff7ed; border: 1px solid #ffedd5; border-radius: 14px;
-      padding: 1.1rem 1.4rem; margin-top: 1.8rem; font-size: 0.88rem; color: #c2410c;
-    }
-    .bn-banner-footer strong { color: #9a3412; }
+    /* ESTILOS DE GESTIÓN (PILAR 4) */
+    .tool-card.oa-card { border: 1.5px solid rgba(246,130,18,0.35); }
+    .tool-card.oa-card .tool-scope { color: var(--oa); border-color: rgba(246,130,18,0.3); background: rgba(246,130,18,0.07); }
+    .tool-card.oa-card .btn-main { background: var(--oa); }
+    .tool-card.oa-card .btn-main:hover { background: #d96f0b; }
 
     /* ESTILOS DE AUTOMATIZACIÓN (PILAR 5) */
     .tool-card.leaf-card { border: 1.5px solid rgba(63,158,92,0.3); }
@@ -247,6 +229,10 @@
     }
     .flow-box small { display: block; font-weight: 500; color: var(--muted); font-size: 0.68rem; margin-top: 0.1rem; }
     .flow-arrow { color: var(--leaf); font-size: 1.1rem; font-weight: 700; flex-shrink: 0; }
+    
+    /* PROYECTOS EN DESARROLLO */
+    .dev-card { border: 1.5px dashed var(--muted) !important; background: repeating-linear-gradient(45deg, rgba(255,255,255,1), rgba(255,255,255,1) 10px, rgba(244,249,252,0.5) 10px, rgba(244,249,252,0.5) 20px); }
+    .dev-card .btn-main { background: var(--muted); cursor: not-allowed; }
 
     /* ── EQUIPO CENTRADO Y FOTOS ── */
     #equipo { background: var(--bg); border-top: 1px solid var(--border); text-align: center; }
@@ -267,12 +253,13 @@
     
     .member-img-wrap {
       width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1rem; 
-      border: 3px solid var(--sky); box-shadow: 0 4px 12px rgba(20,50,74,0.1);
+      border: 3px solid var(--teal); box-shadow: 0 4px 12px rgba(20,50,74,0.1);
       overflow: hidden; display: flex; align-items: center; justify-content: center;
+      background: #eaf4fa;
     }
     .member-img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transform: scale(1.15); }
     .member-card h4 { font-size: 1rem; font-weight: 700; color: var(--ink); }
-    .member-card .rol { font-size: 0.8rem; color: var(--teal); font-weight: 600; margin-top: 0.2rem; }
+    .member-card .rol { font-size: 0.8rem; color: var(--teal); font-weight: 700; margin-top: 0.4rem; }
 
     footer {
       background: var(--ink); color: rgba(255,255,255,0.85);
@@ -329,36 +316,36 @@
 
       <div class="section-label" style="margin-top:2.4rem;">Arquitectura del ecosistema</div>
       <div class="pilares bn-pilares">
-        <div class="pilar">
+        <a href="#pilar1" class="pilar">
           <span class="bn-pilar-tag">01</span>
           <div class="pilar-icon">🔎</div>
           <h3>Acceso y Descubrimiento</h3>
           <p>Elimina las barreras entre el usuario y la información científica, facilitando el acceso integrado e intuitivo.</p>
-        </div>
-        <div class="pilar">
+        </a>
+        <a href="#pilar2" class="pilar">
           <span class="bn-pilar-tag">02</span>
           <div class="pilar-icon">🤖</div>
           <h3>Inteligencia Artificial</h3>
           <p>Agentes IA especializados para búsqueda académica, citación, investigación, bibliometría y apoyo jurídico 24/7.</p>
-        </div>
-        <div class="pilar">
+        </a>
+        <a href="#pilar3" class="pilar">
           <span class="bn-pilar-tag">03</span>
           <div class="pilar-icon">🎓</div>
           <h3>Formación Digital</h3>
           <p>Experiencias de aprendizaje con +2.204 usuarios inscritos</p>
-        </div>
-        <div class="pilar">
+        </a>
+        <a href="#pilar4" class="pilar">
           <span class="bn-pilar-tag">04</span>
           <div class="pilar-icon">📊</div>
           <h3>Gestión e Inteligencia</h3>
           <p>Tablero SROI, automatización de reservas y servicios para transformar datos en decisiones estratégicas.</p>
-        </div>
-        <div class="pilar">
+        </a>
+        <a href="#pilar5" class="pilar">
           <span class="bn-pilar-tag">05</span>
           <div class="pilar-icon">🔗</div>
           <h3>Conectividad</h3>
           <p>Programación de tareas automáticas dentro de Google Workspace para optimizar procesos bibliotecarios.</p>
-        </div>
+        </a>
       </div>
 
       <!-- PILAR 1 -->
@@ -371,7 +358,6 @@
           </div>
         </div>
         <div class="tools-grid">
-          
           <!-- BiblioClick -->
           <div class="tool-card">
             <div class="tool-banner-wrap">
@@ -413,7 +399,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -426,11 +411,8 @@
             <p>Ecosistema de agentes de IA entrenados con la metodología Areandina para potenciar la investigación, citación, ciencia abierta y gestión jurídica.</p>
           </div>
         </div>
-
-        <!-- AGENTES ACTIVOS (TODOS LOS 5 AGENTES) -->
         <h4 style="font-family:'Fraunces',serif; font-size:1.1rem; font-weight:800; margin-bottom:1rem; color:var(--purple);">Agentes Activos</h4>
         <div class="tools-grid">
-          
           <!-- Astra_Biblio -->
           <div class="tool-card ia-card">
             <div class="tool-banner-wrap">
@@ -535,9 +517,7 @@
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
 
       <!-- PILAR 3 -->
@@ -549,9 +529,7 @@
             <p>Desarrolla competencias digitales e investigativas a través de cursos y experiencias estructuradas de aprendizaje.</p>
           </div>
         </div>
-
         <div class="tools-grid">
-          
           <!-- ApropIA -->
           <div class="tool-card">
             <div class="tool-banner-wrap">
@@ -635,7 +613,60 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
+      <!-- PILAR 4: GESTIÓN E INTELIGENCIA DE DATOS -->
+      <div class="bn-pilar-block c4" id="pilar4">
+        <div class="bn-pilar-head">
+          <div class="bn-pilar-num">04</div>
+          <div>
+            <h3>Gestión e Inteligencia de Datos</h3>
+            <p>Herramientas analíticas y de automatización para transformar los datos de uso en decisiones estratégicas y optimizar la toma de decisiones.</p>
+          </div>
+        </div>
+        <div class="tools-grid">
+          <!-- Tablero SROI -->
+          <div class="tool-card oa-card">
+            <div class="tool-banner-wrap">
+              <img src="https://lh3.googleusercontent.com/d/13n-M2Nn5dsWyKEHoI9kWH9BKXifBc2mU" alt="Tablero SROI" class="tool-banner-img">
+            </div>
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">Tablero SROI & Analytics</div>
+                  <span class="tool-scope">Retorno Social de Inversión</span>
+                  <p class="tool-desc">Plataforma de análisis de datos para medir el impacto, uso de recursos y retorno social de la inversión de las bibliotecas.</p>
+                  <a href="https://lookerstudio.google.com/u/0/reporting/17154eb5-e2f9-4b6d-9787-8df0c6ff7eb1/page/p_h1x8i4u5ld" target="_blank" class="btn-main">Ver Tablero</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://lookerstudio.google.com/u/0/reporting/17154eb5-e2f9-4b6d-9787-8df0c6ff7eb1/page/p_h1x8i4u5ld"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sistema de Reservas -->
+          <div class="tool-card oa-card">
+            <div class="tool-banner-wrap">
+              <img src="https://lh3.googleusercontent.com/d/1OgitPvAyGgdMrS049Qk-hxVz3W4nQEyu" alt="Reserva de Espacios" class="tool-banner-img">
+            </div>
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">Gestión de Reservas</div>
+                  <span class="tool-scope">Automatización de Salas</span>
+                  <p class="tool-desc">Sistema automatizado de agendamiento y reserva de salas de estudio, computadores y espacios colaborativos.</p>
+                  <a href="https://bidig.areandina.edu.co/" target="_blank" class="btn-main">Reservar Espacio</a>
+                </div>
+                <div class="qr-static-box">
+                  <div class="qr-holder" data-url="https://bidig.areandina.edu.co/"></div>
+                  <span class="qr-label">Escanear QR</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -649,184 +680,203 @@
           </div>
         </div>
 
-        <div class="tools-grid">
-          <div class="tool-card leaf-card">
-            <div class="tool-card-body">
-              <div class="tool-content-layout">
-                <div class="tool-info">
-                  <div class="tool-name">NexusScript Core</div>
-                  <span class="tool-scope">Repositorio Central</span>
-                  <p class="tool-desc">Repositorio central de código y desarrollos en Google Apps Script para el ecosistema de Bibliotecas Areandina.</p>
-                  <a href="https://github.com/nexusscript-core" target="_blank" class="btn-main">Abrir Repositorio</a>
-                </div>
-                <div class="qr-static-box">
-                  <div class="qr-holder" data-url="https://github.com/nexusscript-core"></div>
-                  <span class="qr-label">Escanear QR</span>
-                </div>
+        <!-- TARJETA NEXUSSCRIPT CORE RESTAURADA -->
+        <div class="tool-card leaf-card" style="margin-bottom: 2.5rem; max-width: 900px;">
+          <div class="tool-card-body">
+            <div class="tool-content-layout">
+              <div class="tool-info">
+                <div class="tool-name" style="font-size: 1.3rem;">NexusScript Core</div>
+                <span class="tool-scope">Repositorio Central</span>
+                <p class="tool-desc" style="font-size: 0.95rem; margin-top: 0.3rem;">Repositorio central de código y desarrollos en Google Apps Script para el ecosistema de Bibliotecas Areandina.</p>
+                <a href="#" class="btn-main" style="align-self: flex-start; margin-top: 1rem; padding: 0.6rem 1.5rem;">Abrir Repositorio</a>
+              </div>
+              <div class="qr-static-box">
+                <div class="qr-holder" data-url="https://script.google.com/"></div>
+                <span class="qr-label">Escanear QR</span>
               </div>
             </div>
           </div>
         </div>
-
-        <div style="margin-top:2rem;">
-          <h4 style="font-family:'Fraunces',serif; font-size:1.1rem; font-weight:800; margin-bottom:1rem;">Diagramas de Automatización Desarrollados</h4>
-          
-          <!-- Flujo 1 -->
-          <div class="flow-card">
-            <h4>1. Servicio de Carta de No Adeudo Automática</h4>
-            <p>Validación inmediata del estado del usuario contra el catálogo para expedir la paz y salvo digital al instante en formato PDF.</p>
-            <div class="flow-row">
-              <div class="flow-box">Formulario de Solicitud<small>Google Forms</small></div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-box">Validación de Deuda<small>Google Sheets / Script</small></div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-box">Generación de Carta PDF<small>Google Docs / Drive</small></div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-box">Envío al Correo<small>Gmail API</small></div>
-            </div>
-          </div>
-
-          <!-- Flujo 2 -->
-          <div class="flow-card">
-            <h4>2. Sistema de Notificaciones de Préstamo</h4>
-            <p>Alertas automáticas vía correo electrónico notificando sobre vencimientos, renovaciones e inminentes devoluciones.</p>
-            <div class="flow-row">
-              <div class="flow-box">Base de Datos de Préstamos<small>Google Sheets</small></div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-box">Verificación Diaria Automática<small>Trigger GAS (Time-driven)</small></div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-box">Generación de Alerta Personalizada<small>HTML Template</small></div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-box">Envío al Usuario<small>Gmail API</small></div>
-            </div>
-          </div>
-
-          <!-- Flujo 3 -->
-          <div class="flow-card">
-            <h4>3. Comunidad de Alfabetización · Biblionova — Areandina </h4>
-            <p>Sistema de gestión de capacitaciones de alfabetización informacional para la red de sedes de la Fundación Universitaria del Área Andina.</p>
-            <div class="flow-row">
-              <div class="flow-box">Evaluación del Estudiante<small>Google Forms</small></div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-box">Cálculo de Puntaje<small>Apps Script</small></div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-box">Certificado PDF Personalizado<small>Google Slides/Docs</small></div>
-              <div class="flow-arrow">→</div>
-              <div class="flow-box">Notificación con Adjunto<small>Gmail API</small></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- MÓDULO EN DESARROLLO (REINCORPORADO FIEL A LA SEGUNDA IMAGEN) -->
-      <div class="dev-module-box">
-        <div class="dev-module-title">
-          <span>🛠️</span> Módulo en Desarrollo
-        </div>
-        <p class="dev-module-desc">Iniciativas estratégicas en etapa de diseño, desarrollo y validación para su futura implementación en Bibliotecas Areandina, garantizadas mediante pruebas, optimización e integración con el ecosistema institucional.</p>
         
-        <div class="dev-items-grid">
-          <div class="dev-item">
-            <div class="dev-item-head">💬 Librín</div>
-            <p>Chatbot conversacional para servicios y reservas bibliotecarias.</p>
+        <h4 style="font-family:'Fraunces',serif; font-size:1.15rem; font-weight:800; margin-bottom:0.6rem; color:var(--leaf);">NexusScript · Ecosistema de Automatización</h4>
+        <p style="font-size: 0.9rem; color: var(--muted); margin-bottom: 1.5rem; max-width: 800px;">
+          NexusScript es nuestra suite de scripts e implementaciones en la nube que conectan Google Forms, Sheets y Gmail mediante Google Apps Script (GAS). Estas herramientas reducen la carga operativa manual, agilizan las notificaciones a los usuarios y garantizan el registro sistemático de datos para la toma de decisiones estratégicas.
+        </p>
+
+        <!-- Diagrama 1: Gestión de Turnos -->
+        <div class="flow-card">
+          <h4>01. Gestión Inteligente de Turnos y Agendamiento</h4>
+          <p>Captura solicitudes presenciales, calcula el número de atención en cola y envía notificaciones por correo en tiempo real.</p>
+          <div class="flow-row">
+            <div class="flow-box">📝 Usuario llena Formulario<small>Google Forms</small></div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-box">⚙️ Apps Script procesa<small>Calcula turno & cola</small></div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-box">📩 Notificación por Email<small>Gmail API en tiempo real</small></div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-box">📊 Registro Centralizado<small>Google Sheets / Looker</small></div>
           </div>
-          <div class="dev-item">
-            <div class="dev-item-head">📁 Mesas Curriculares</div>
-            <p>Solución digital interactiva que automatiza la solicitud de material bibliográfico.</p>
+        </div>
+
+        <!-- Diagrama 2: Evaluación de Proveedores -->
+        <div class="flow-card">
+          <h4>02. Evaluación y Calificación de Proveedores</h4>
+          <p>Sistematiza las evaluaciones periódicas de proveedores de bases de datos y recursos digitales con cálculo automático de scores.</p>
+          <div class="flow-row">
+            <div class="flow-box">📋 Evaluación por Analista<small>Criterios cuantitativos</small></div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-box">🧮 Motor de Cálculo (GAS)<small>Ponderación e índices</small></div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-box">📑 Generación de Reporte<small>Consolidado ejecutivo</small></div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-box">📈 Tablero de Decisiones<small>Decisión de renovación</small></div>
           </div>
-          <div class="dev-item">
-            <div class="dev-item-head">📑 Automatización de Solicitudes</div>
-            <p>Automatización de solicitudes de formación de usuarios.</p>
+        </div>
+
+        <!-- Diagrama 3: Generación Automática de Paz y Salvo -->
+        <div class="flow-card">
+          <h4>03. Generación Automática de Paz y Salvo</h4>
+          <p>Verifica el estado del usuario en el SGB y emite el documento oficial de Paz y Salvo en PDF enviado directamente al correo institucional.</p>
+          <div class="flow-row">
+            <div class="flow-box">🎓 Solicitud de Grado<small>Formulario de Paz y Salvo</small></div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-box">🔍 Verificación SGB<small>Estado de cuenta / préstamos</small></div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-box">📄 Generación de PDF<small>Documento PDF con sello digital</small></div>
+            <div class="flow-arrow">➔</div>
+            <div class="flow-box">✉️ Envío al Correo<small>Gmail automatizado</small></div>
           </div>
         </div>
       </div>
 
-      <!-- NOTA INFORMATIVA FINAL (SEGUNDA IMAGEN) -->
-      <div class="bn-banner-footer">
-        🌱 <strong>BiblioNova está construido sobre cinco pilares estratégicos</strong>, que articulan 12 proyectos de innovación — desde el buscador de BiblioClick hasta los agentes de Suite Intellectus y las automatizaciones de NexusScript Core.
+      <!-- PROYECTOS EN DESARROLLO -->
+      <div class="bn-pilar-block" id="proyectos-desarrollo" style="border-top: 1px dashed var(--border); padding-top: 3rem; margin-top: 4rem;">
+        <div class="bn-pilar-head">
+          <div class="bn-pilar-num" style="color: var(--muted); font-size: 1.8rem; font-family: 'Inter', sans-serif;">🚧</div>
+          <div>
+            <h3 style="color: var(--ink);">Proyectos en Desarrollo</h3>
+            <p>Iniciativas y herramientas que se encuentran actualmente en fase de prototipado, investigación o pruebas beta dentro del ecosistema BiblioNova.</p>
+          </div>
+        </div>
+        <div class="tools-grid">
+          
+          <div class="tool-card dev-card">
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">Sistema Integrado de Colecciones (V2)</div>
+                  <span class="tool-scope" style="color: var(--muted); background: rgba(91, 114, 136, 0.1); border-color: rgba(91, 114, 136, 0.3);">Fase de Pruebas</span>
+                  <p class="tool-desc">Actualización de la plataforma interactiva del catálogo físico y digital, implementando nuevos algoritmos de recomendación de lectura y conectividad más rápida.</p>
+                  <a href="#" class="btn-main" onclick="event.preventDefault();">Próximamente</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tool-card dev-card">
+            <div class="tool-card-body">
+              <div class="tool-content-layout">
+                <div class="tool-info">
+                  <div class="tool-name">Asistente de Catalogación IA</div>
+                  <span class="tool-scope" style="color: var(--muted); background: rgba(91, 114, 136, 0.1); border-color: rgba(91, 114, 136, 0.3);">Prototipado</span>
+                  <p class="tool-desc">Entrenamiento de un modelo de lenguaje para asistir al personal bibliotecario en la asignación de metadatos, materias y clasificación Dewey de forma semiautomática.</p>
+                  <a href="#" class="btn-main" onclick="event.preventDefault();">Próximamente</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
       </div>
 
     </div>
   </section>
 
-  <!-- EQUIPO DE TRABAJO CENTRADO -->
+  <!-- SECCIÓN EQUIPO DE TRABAJO RESTAURADA Y CON IMÁGENES ACTUALIZADAS -->
   <section id="equipo">
     <div class="container">
       <div class="section-label">Liderazgo y Gestión</div>
       <h2 class="section-title">Equipo de Trabajo</h2>
       <div class="divider"></div>
-      <p class="section-body">El equipo multidisciplinario detrás de la conceptualización, desarrollo e implementación de BiblioNova.</p>
+      <p class="section-body">
+        El equipo multidisciplinario detrás de la conceptualización, desarrollo e implementación de BiblioNova.
+      </p>
 
       <div class="equipo-grid">
+        <!-- Andrea Pumarejo -->
         <div class="member-card">
           <div class="member-img-wrap">
             <img src="https://bidig.areandina.edu.co/wp-content/uploads/2026/06/Andrea-Pumarejo-1.png" alt="Andrea Pumarejo" class="member-img">
           </div>
           <h4>Andrea Pumarejo</h4>
-          <div class="rol">Coordinadora</div>
+          <p class="rol">Coordinadora</p>
         </div>
+        
+        <!-- Rosa Fermina -->
         <div class="member-card">
           <div class="member-img-wrap">
             <img src="https://bidig.areandina.edu.co/wp-content/uploads/2025/12/Rosa-Fermina.png" alt="Rosa Fermina" class="member-img">
           </div>
           <h4>Rosa Fermina</h4>
-          <div class="rol">Subdirectora de Bibliotecas Areandina</div>
+          <p class="rol">Subdirectora de Bibliotecas Areandina</p>
         </div>
+
+        <!-- Cristian -->
         <div class="member-card">
           <div class="member-img-wrap">
             <img src="https://bidig.areandina.edu.co/wp-content/uploads/2025/12/Cristian.png" alt="Cristian" class="member-img">
           </div>
           <h4>Cristian</h4>
-          <div class="rol">Auxiliar</div>
+          <p class="rol">Auxiliar</p>
         </div>
+
+        <!-- William Saboya -->
         <div class="member-card">
           <div class="member-img-wrap">
             <img src="https://bidig.areandina.edu.co/wp-content/uploads/2025/12/William-Sayoya.png" alt="William Saboya" class="member-img">
           </div>
           <h4>William Saboya</h4>
-          <div class="rol">Analista</div>
+          <p class="rol">Analista</p>
         </div>
+
+        <!-- Alejandro Labrada -->
         <div class="member-card">
           <div class="member-img-wrap">
             <img src="https://bidig.areandina.edu.co/wp-content/uploads/2025/12/Alejandro-Labrada.png" alt="Alejandro Labrada" class="member-img">
           </div>
           <h4>Alejandro Labrada</h4>
-          <div class="rol">Analista</div>
+          <p class="rol">Analista</p>
         </div>
       </div>
     </div>
   </section>
+
 </main>
 
-<footer>
-  <p><strong>BiblioNova</strong> &copy; 2026 Fundación Universitaria del Área Andina. Todos los derechos reservados.</p>
-</footer>
-
 <script>
-  // Barra de progreso de lectura
-  window.addEventListener('scroll', () => {
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (winScroll / height) * 100;
-    document.getElementById('progressBar').style.width = scrolled + '%';
-  });
-
-  // Generador dinámico de códigos QR en vivo dentro de cada contenedor
-  window.addEventListener('DOMContentLoaded', () => {
+  // Generación automática de QRs al cargar la página
+  document.addEventListener("DOMContentLoaded", function() {
     const qrContainers = document.querySelectorAll('.qr-holder');
     qrContainers.forEach(container => {
-      const targetUrl = container.getAttribute('data-url');
-      if (targetUrl) {
+      const url = container.getAttribute('data-url');
+      if (url && typeof QRCode !== 'undefined') {
         new QRCode(container, {
-          text: targetUrl,
+          text: url,
           width: 85,
           height: 85,
-          colorDark: "#14324a",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.M
+          colorDark : "#14324a",
+          colorLight : "#ffffff",
+          correctLevel : QRCode.CorrectLevel.H
         });
       }
+    });
+
+    // Indicador de barra de progreso de scroll
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
     });
   });
 </script>
